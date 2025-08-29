@@ -2,6 +2,8 @@
 
 A REST API built with Node.js that processes arrays and returns categorized data according to the VIT Full Stack Question Paper requirements.
 
+**Latest Update**: Fixed Vercel deployment issues - Updated package.json and vercel.json for better compatibility.
+
 ## 🚀 Features
 
 - **POST /bfhl** endpoint that processes input arrays
