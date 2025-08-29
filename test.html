@@ -3,146 +3,398 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bajaj Finserv API Tester</title>
+    <title>Bajaj Finserv API Tester - VIT Assignment</title>
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            max-width: 800px;
-            margin: 0 auto;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
             padding: 20px;
-            background-color: #f5f5f5;
         }
+
         .container {
+            max-width: 900px;
+            margin: 0 auto;
             background: white;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
         }
-        h1 {
-            color: #2c3e50;
+
+        .header {
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            color: white;
+            padding: 30px;
             text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            font-weight: 300;
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .content {
+            padding: 40px;
+        }
+
+        .instructions {
+            background: #f8f9fa;
+            border-left: 4px solid #3498db;
+            padding: 20px;
+            margin-bottom: 30px;
+            border-radius: 8px;
+        }
+
+        .instructions h3 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+        }
+
+        .instructions ul {
+            margin-left: 20px;
+            line-height: 1.6;
+        }
+
+        .instructions li {
+            margin-bottom: 8px;
+            color: #555;
+        }
+
+        .form-section {
             margin-bottom: 30px;
         }
+
         .form-group {
             margin-bottom: 20px;
         }
+
         label {
             display: block;
-            margin-bottom: 5px;
-            font-weight: bold;
-            color: #34495e;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #2c3e50;
+            font-size: 1.1rem;
         }
+
+        .input-group {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
         input[type="text"] {
-            width: 100%;
-            padding: 10px;
-            border: 2px solid #ddd;
-            border-radius: 5px;
+            flex: 1;
+            padding: 15px;
+            border: 2px solid #e1e8ed;
+            border-radius: 10px;
             font-size: 16px;
-            box-sizing: border-box;
+            transition: all 0.3s ease;
         }
+
         input[type="text"]:focus {
             border-color: #3498db;
             outline: none;
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
         }
-        button {
-            background-color: #3498db;
-            color: white;
-            padding: 12px 24px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
-            margin-right: 10px;
-        }
-        button:hover {
-            background-color: #2980b9;
-        }
+
         .example-btn {
-            background-color: #27ae60;
+            background: #27ae60;
+            color: white;
+            padding: 15px 20px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            white-space: nowrap;
         }
+
         .example-btn:hover {
-            background-color: #229954;
+            background: #229954;
+            transform: translateY(-2px);
         }
+
+        .test-btn {
+            background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+            color: white;
+            padding: 18px 36px;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 18px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            margin-right: 15px;
+        }
+
+        .test-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(52, 152, 219, 0.3);
+        }
+
+        .clear-btn {
+            background: #e74c3c;
+            color: white;
+            padding: 18px 36px;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 18px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .clear-btn:hover {
+            background: #c0392b;
+            transform: translateY(-3px);
+        }
+
         .response {
-            background-color: #f8f9fa;
-            border: 1px solid #dee2e6;
-            border-radius: 5px;
-            padding: 20px;
-            margin-top: 20px;
+            background: #f8f9fa;
+            border: 2px solid #e1e8ed;
+            border-radius: 12px;
+            padding: 25px;
+            margin-top: 30px;
             white-space: pre-wrap;
             font-family: 'Courier New', monospace;
             font-size: 14px;
-            max-height: 400px;
+            max-height: 500px;
             overflow-y: auto;
+            display: none;
         }
-        .error {
-            color: #e74c3c;
-            font-weight: bold;
+
+        .response.success {
+            border-color: #27ae60;
+            background: #f0f8f0;
         }
-        .success {
-            color: #27ae60;
-            font-weight: bold;
+
+        .response.error {
+            border-color: #e74c3c;
+            background: #fdf2f2;
         }
-        .examples {
+
+        .examples-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
             margin-top: 30px;
+        }
+
+        .example-card {
+            background: white;
+            border: 2px solid #e1e8ed;
+            border-radius: 12px;
             padding: 20px;
-            background-color: #ecf0f1;
-            border-radius: 5px;
+            transition: all 0.3s ease;
         }
-        .examples h3 {
+
+        .example-card:hover {
+            border-color: #3498db;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .example-card h4 {
             color: #2c3e50;
-            margin-top: 0;
-        }
-        .example-item {
             margin-bottom: 15px;
-            padding: 10px;
-            background-color: white;
-            border-radius: 5px;
+            font-size: 1.2rem;
+        }
+
+        .example-card .input-data {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: monospace;
+            margin-bottom: 15px;
             border-left: 4px solid #3498db;
+        }
+
+        .example-card .expected-output {
+            font-size: 0.9rem;
+            color: #666;
+            line-height: 1.4;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 20px;
+            color: #3498db;
+            font-size: 1.1rem;
+        }
+
+        .spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #3498db;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 15px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .status-indicator {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+
+        .status-online {
+            background: #27ae60;
+        }
+
+        .status-offline {
+            background: #e74c3c;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                margin: 10px;
+                border-radius: 15px;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .content {
+                padding: 20px;
+            }
+            
+            .input-group {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .examples-grid {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>🧪 Bajaj Finserv API Tester</h1>
-        
-        <div class="form-group">
-            <label for="dataInput">Input Data (JSON array):</label>
-            <input type="text" id="dataInput" placeholder='["a", "1", "334", "4", "R", "$"]' value='["a", "1", "334", "4", "R", "$"]'>
+        <div class="header">
+            <h1>🧪 Bajaj Finserv API Tester</h1>
+            <p>VIT Full Stack Question Paper - REST API Testing Tool</p>
         </div>
-        
-        <div class="form-group">
-            <button onclick="testAPI()">🚀 Test API</button>
-            <button class="example-btn" onclick="loadExample1()">📝 Example A</button>
-            <button class="example-btn" onclick="loadExample2()">📝 Example B</button>
-            <button class="example-btn" onclick="loadExample3()">📝 Example C</button>
-        </div>
-        
-        <div id="response" class="response" style="display: none;"></div>
-        
-        <div class="examples">
-            <h3>📚 Test Examples</h3>
-            <div class="example-item">
-                <strong>Example A:</strong> <code>["a", "1", "334", "4", "R", "$"]</code><br>
-                <small>Expected: odd_numbers=["1"], even_numbers=["334","4"], alphabets=["A","R"], special_characters=["$"], sum="339", concat_string="Ra"</small>
+
+        <div class="content">
+            <div class="instructions">
+                <h3>📋 How to Use This Tester</h3>
+                <ul>
+                    <li><strong>Input Format:</strong> Enter your data as a JSON array (e.g., ["a", "1", "334", "4", "R", "$"])</li>
+                    <li><strong>Data Types:</strong> You can mix numbers, alphabets, and special characters</li>
+                    <li><strong>API Response:</strong> The API will categorize your data and return organized results</li>
+                    <li><strong>Examples:</strong> Use the example buttons below to see how different inputs work</li>
+                </ul>
             </div>
-            <div class="example-item">
-                <strong>Example B:</strong> <code>["2", "a", "y", "4", "&", "-", "*", "5", "92", "b"]</code><br>
-                <small>Expected: odd_numbers=["5"], even_numbers=["2","4","92"], alphabets=["A","Y","B"], special_characters=["&","-","*"], sum="103", concat_string="ByA"</small>
+
+            <div class="form-section">
+                <div class="form-group">
+                    <label for="dataInput">📥 Input Data (JSON Array):</label>
+                    <div class="input-group">
+                        <input type="text" id="dataInput" placeholder='["a", "1", "334", "4", "R", "$"]' value='["a", "1", "334", "4", "R", "$"]'>
+                        <button class="example-btn" onclick="loadExample1()">Example A</button>
+                        <button class="example-btn" onclick="loadExample2()">Example B</button>
+                        <button class="example-btn" onclick="loadExample3()">Example C</button>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="apiUrl">🌐 API URL:</label>
+                    <input type="text" id="apiUrl" value="https://bajaj-one-lime.vercel.app/bfhl" placeholder="Enter your API URL">
+                </div>
+
+                <div class="form-group">
+                    <button class="test-btn" onclick="testAPI()">🚀 Test API</button>
+                    <button class="clear-btn" onclick="clearForm()">🗑️ Clear</button>
+                </div>
+
+                <div class="loading" id="loading">
+                    <div class="spinner"></div>
+                    <div>Testing API... Please wait</div>
+                </div>
             </div>
-            <div class="example-item">
-                <strong>Example C:</strong> <code>["A", "ABcD", "DOE"]</code><br>
-                <small>Expected: odd_numbers=[], even_numbers=[], alphabets=["A","ABCD","DOE"], special_characters=[], sum="0", concat_string="EODCBA"</small>
+
+            <div id="response" class="response"></div>
+
+            <div class="examples-grid">
+                <div class="example-card">
+                    <h4>📝 Example A - Mixed Data</h4>
+                    <div class="input-data">["a", "1", "334", "4", "R", "$"]</div>
+                    <div class="expected-output">
+                        <strong>Expected Output:</strong><br>
+                        • Odd numbers: ["1"]<br>
+                        • Even numbers: ["334", "4"]<br>
+                        • Alphabets: ["A", "R"]<br>
+                        • Special characters: ["$"]<br>
+                        • Sum: "339"<br>
+                        • Concat string: "Ra"
+                    </div>
+                </div>
+
+                <div class="example-card">
+                    <h4>📝 Example B - More Complex</h4>
+                    <div class="input-data">["2", "a", "y", "4", "&", "-", "*", "5", "92", "b"]</div>
+                    <div class="expected-output">
+                        <strong>Expected Output:</strong><br>
+                        • Odd numbers: ["5"]<br>
+                        • Even numbers: ["2", "4", "92"]<br>
+                        • Alphabets: ["A", "Y", "B"]<br>
+                        • Special characters: ["&", "-", "*"]<br>
+                        • Sum: "103"<br>
+                        • Concat string: "ByA"
+                    </div>
+                </div>
+
+                <div class="example-card">
+                    <h4>📝 Example C - Alphabets Only</h4>
+                    <div class="input-data">["A", "ABcD", "DOE"]</div>
+                    <div class="expected-output">
+                        <strong>Expected Output:</strong><br>
+                        • Odd numbers: []<br>
+                        • Even numbers: []<br>
+                        • Alphabets: ["A", "ABCD", "DOE"]<br>
+                        • Special characters: []<br>
+                        • Sum: "0"<br>
+                        • Concat string: "EoDdCbAa"
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 
     <script>
-        const API_BASE_URL = 'http://localhost:3000';
+        let apiStatus = 'offline';
         
+        // Function to test the API
         async function testAPI() {
             const dataInput = document.getElementById('dataInput').value;
+            const apiUrl = document.getElementById('apiUrl').value;
             const responseDiv = document.getElementById('response');
+            const loadingDiv = document.getElementById('loading');
             
             try {
                 // Parse the input
@@ -150,19 +402,19 @@
                 try {
                     data = JSON.parse(dataInput);
                 } catch (e) {
-                    throw new Error('Invalid JSON format. Please enter a valid JSON array.');
+                    throw new Error('❌ Invalid JSON format. Please enter a valid JSON array.');
                 }
                 
                 if (!Array.isArray(data)) {
-                    throw new Error('Input must be an array.');
+                    throw new Error('❌ Input must be an array.');
                 }
                 
                 // Show loading
-                responseDiv.style.display = 'block';
-                responseDiv.innerHTML = '🔄 Testing API...';
+                loadingDiv.style.display = 'block';
+                responseDiv.style.display = 'none';
                 
                 // Make API call
-                const response = await fetch(`${API_BASE_URL}/bfhl`, {
+                const response = await fetch(apiUrl, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -172,15 +424,47 @@
                 
                 const result = await response.json();
                 
+                // Hide loading
+                loadingDiv.style.display = 'none';
+                responseDiv.style.display = 'block';
+                
                 if (response.ok && result.is_success) {
-                    responseDiv.innerHTML = `<span class="success">✅ API Response (Status: ${response.status})</span>\n\n${JSON.stringify(result, null, 2)}`;
+                    responseDiv.className = 'response success';
+                    responseDiv.innerHTML = `
+                        <div style="margin-bottom: 15px;">
+                            <span class="status-indicator status-online"></span>
+                            <strong style="color: #27ae60;">✅ API Response (Status: ${response.status})</strong>
+                        </div>
+                        <div style="background: white; padding: 20px; border-radius: 8px; border: 1px solid #e1e8ed;">
+                            ${JSON.stringify(result, null, 2)}
+                        </div>
+                    `;
+                    apiStatus = 'online';
                 } else {
-                    responseDiv.innerHTML = `<span class="error">❌ API Error (Status: ${response.status})</span>\n\n${JSON.stringify(result, null, 2)}`;
+                    responseDiv.className = 'response error';
+                    responseDiv.innerHTML = `
+                        <div style="margin-bottom: 15px;">
+                            <span class="status-indicator status-offline"></span>
+                            <strong style="color: #e74c3c;">❌ API Error (Status: ${response.status})</strong>
+                        </div>
+                        <div style="background: white; padding: 20px; border-radius: 8px; border: 1px solid #e1e8ed;">
+                            ${JSON.stringify(result, null, 2)}
+                        </div>
+                    `;
+                    apiStatus = 'offline';
                 }
                 
             } catch (error) {
+                loadingDiv.style.display = 'none';
                 responseDiv.style.display = 'block';
-                responseDiv.innerHTML = `<span class="error">❌ Error: ${error.message}</span>`;
+                responseDiv.className = 'response error';
+                responseDiv.innerHTML = `
+                    <div style="margin-bottom: 15px;">
+                        <span class="status-indicator status-offline"></span>
+                        <strong style="color: #e74c3c;">❌ Error: ${error.message}</strong>
+                    </div>
+                `;
+                apiStatus = 'offline';
             }
         }
         
@@ -196,17 +480,34 @@
             document.getElementById('dataInput').value = '["A", "ABcD", "DOE"]';
         }
         
-        // Test health endpoint on page load
+        function clearForm() {
+            document.getElementById('dataInput').value = '';
+            document.getElementById('response').style.display = 'none';
+            document.getElementById('loading').style.display = 'none';
+        }
+        
+        // Test API health on page load
         window.addEventListener('load', async () => {
+            const apiUrl = document.getElementById('apiUrl').value;
             try {
-                const response = await fetch(`${API_BASE_URL}/health`);
+                const response = await fetch(apiUrl.replace('/bfhl', '/health'));
                 if (response.ok) {
                     console.log('✅ API is running and healthy');
+                    apiStatus = 'online';
                 } else {
                     console.log('❌ API health check failed');
+                    apiStatus = 'offline';
                 }
             } catch (error) {
-                console.log('❌ Cannot connect to API. Make sure the server is running on port 3000');
+                console.log('❌ Cannot connect to API. Make sure the server is running.');
+                apiStatus = 'offline';
+            }
+        });
+        
+        // Allow Enter key to submit
+        document.getElementById('dataInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                testAPI();
             }
         });
     </script>
