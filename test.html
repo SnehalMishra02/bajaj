@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bajaj Finserv API Tester</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #34495e;
+        }
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+        input[type="text"]:focus {
+            border-color: #3498db;
+            outline: none;
+        }
+        button {
+            background-color: #3498db;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-right: 10px;
+        }
+        button:hover {
+            background-color: #2980b9;
+        }
+        .example-btn {
+            background-color: #27ae60;
+        }
+        .example-btn:hover {
+            background-color: #229954;
+        }
+        .response {
+            background-color: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+            padding: 20px;
+            margin-top: 20px;
+            white-space: pre-wrap;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        .error {
+            color: #e74c3c;
+            font-weight: bold;
+        }
+        .success {
+            color: #27ae60;
+            font-weight: bold;
+        }
+        .examples {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .examples h3 {
+            color: #2c3e50;
+            margin-top: 0;
+        }
+        .example-item {
+            margin-bottom: 15px;
+            padding: 10px;
+            background-color: white;
+            border-radius: 5px;
+            border-left: 4px solid #3498db;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧪 Bajaj Finserv API Tester</h1>
+        
+        <div class="form-group">
+            <label for="dataInput">Input Data (JSON array):</label>
+            <input type="text" id="dataInput" placeholder='["a", "1", "334", "4", "R", "$"]' value='["a", "1", "334", "4", "R", "$"]'>
+        </div>
+        
+        <div class="form-group">
+            <button onclick="testAPI()">🚀 Test API</button>
+            <button class="example-btn" onclick="loadExample1()">📝 Example A</button>
+            <button class="example-btn" onclick="loadExample2()">📝 Example B</button>
+            <button class="example-btn" onclick="loadExample3()">📝 Example C</button>
+        </div>
+        
+        <div id="response" class="response" style="display: none;"></div>
+        
+        <div class="examples">
+            <h3>📚 Test Examples</h3>
+            <div class="example-item">
+                <strong>Example A:</strong> <code>["a", "1", "334", "4", "R", "$"]</code><br>
+                <small>Expected: odd_numbers=["1"], even_numbers=["334","4"], alphabets=["A","R"], special_characters=["$"], sum="339", concat_string="Ra"</small>
+            </div>
+            <div class="example-item">
+                <strong>Example B:</strong> <code>["2", "a", "y", "4", "&", "-", "*", "5", "92", "b"]</code><br>
+                <small>Expected: odd_numbers=["5"], even_numbers=["2","4","92"], alphabets=["A","Y","B"], special_characters=["&","-","*"], sum="103", concat_string="ByA"</small>
+            </div>
+            <div class="example-item">
+                <strong>Example C:</strong> <code>["A", "ABcD", "DOE"]</code><br>
+                <small>Expected: odd_numbers=[], even_numbers=[], alphabets=["A","ABCD","DOE"], special_characters=[], sum="0", concat_string="EODCBA"</small>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE_URL = 'http://localhost:3000';
+        
+        async function testAPI() {
+            const dataInput = document.getElementById('dataInput').value;
+            const responseDiv = document.getElementById('response');
+            
+            try {
+                // Parse the input
+                let data;
+                try {
+                    data = JSON.parse(dataInput);
+                } catch (e) {
+                    throw new Error('Invalid JSON format. Please enter a valid JSON array.');
+                }
+                
+                if (!Array.isArray(data)) {
+                    throw new Error('Input must be an array.');
+                }
+                
+                // Show loading
+                responseDiv.style.display = 'block';
+                responseDiv.innerHTML = '🔄 Testing API...';
+                
+                // Make API call
+                const response = await fetch(`${API_BASE_URL}/bfhl`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ data: data })
+                });
+                
+                const result = await response.json();
+                
+                if (response.ok && result.is_success) {
+                    responseDiv.innerHTML = `<span class="success">✅ API Response (Status: ${response.status})</span>\n\n${JSON.stringify(result, null, 2)}`;
+                } else {
+                    responseDiv.innerHTML = `<span class="error">❌ API Error (Status: ${response.status})</span>\n\n${JSON.stringify(result, null, 2)}`;
+                }
+                
+            } catch (error) {
+                responseDiv.style.display = 'block';
+                responseDiv.innerHTML = `<span class="error">❌ Error: ${error.message}</span>`;
+            }
+        }
+        
+        function loadExample1() {
+            document.getElementById('dataInput').value = '["a", "1", "334", "4", "R", "$"]';
+        }
+        
+        function loadExample2() {
+            document.getElementById('dataInput').value = '["2", "a", "y", "4", "&", "-", "*", "5", "92", "b"]';
+        }
+        
+        function loadExample3() {
+            document.getElementById('dataInput').value = '["A", "ABcD", "DOE"]';
+        }
+        
+        // Test health endpoint on page load
+        window.addEventListener('load', async () => {
+            try {
+                const response = await fetch(`${API_BASE_URL}/health`);
+                if (response.ok) {
+                    console.log('✅ API is running and healthy');
+                } else {
+                    console.log('❌ API health check failed');
+                }
+            } catch (error) {
+                console.log('❌ Cannot connect to API. Make sure the server is running on port 3000');
+            }
+        });
+    </script>
+</body>
+</html> 
