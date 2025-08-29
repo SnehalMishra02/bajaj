@@ -65,3 +65,4 @@ Thumbs.db
 *.temp 
 
 DEPLOYMENT.md
+.vercel
